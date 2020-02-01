@@ -6,6 +6,9 @@ const gameHandle = require('./gameHandle')
 
 let playerWin = 0;
 // 用户连续三次出同一个选项
+const playerActionLast3 = [];
+let sameCount = 0;
+let lastPlayerAction = null;
 
 http
     .createServer((req, res) => {
@@ -22,16 +25,47 @@ http
         // 请求操作
         if(pathname === '/game'){
             const { action:playerAction } = querystring.parse(query)
+
+            if(playerWin >= 3 || sameCount === 999){
+                res.writeHead(500)
+                res.end('I quit, you are so strong!')
+                return
+            }
+
+            // 防作弊逻辑
+            // 方案1
+            // playerActionLast3.push(playerAction);
+            // if(playerActionLast3.length > 3){
+            //     playerActionLast3.shift()
+            // }
+            // if (playerActionLast3.length === 3) {
+            //     if (playerActionLast3[0] === playerActionLast3[1] && playerActionLast3[1] === playerActionLast3[2]) {
+            //         res.end("you can't play one action for 3 times!")
+            //         return
+            //     }
+            // }
+
+            //方案2
+            if (lastPlayerAction && playerAction === lastPlayerAction) {
+                sameCount++;
+            } else {
+                sameCount = 0;
+            }
+            lastPlayerAction = playerAction
+            if (sameCount >= 3) {
+                res.writeHead(400)
+                res.end("you cheat!")
+                sameCount = 999
+                return
+            }
+
+
             const result = gameHandle(playerAction);
             if(result === 0){
                 res.end('tie!')
             } else if (result === 1) {
                 playerWin++;
-                if(playerWin >= 3){
-                    res.end('I quit, you are so strong!')
-                }else {
-                    res.end('you win!')
-                }
+                res.end('you win!')
             } else {
                 res.end('you lose!')
             }
