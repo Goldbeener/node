@@ -52,7 +52,6 @@ gameKoa.use(async (ctx, next) => {
             ctx.status = 400
             return
         }
-        console.log('samecount>>>>', sameCount)
         if (sameCount === 999) {
             ctx.status = 500;
             ctx.body = "I'll never play with you ！"
