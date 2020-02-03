@@ -1,0 +1,15 @@
+{
+  "name": "rpc",
+  "version": "0.1.0",
+  "description": "rpc: 用目标服务器id换取目标服务器的真实ip ajax: 用域名在dns服务器换取目标服务器的ip ## 调用 双方进行数据交换 rpc： 二进制协议进行数据通信，传递的是二进制流 ajax： http 协议数据通信，传递的是html文件或者是json数据",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "duxin <duxin@kuaishou.com>",
+  "license": "ISC",
+  "dependencies": {
+    "protocol-buffers": "^4.1.0"
+  }
+}

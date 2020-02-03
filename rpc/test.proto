@@ -1,0 +1,4 @@
+message Column {
+    required float id = 1;
+    required float price = 2;
+}
