@@ -20,6 +20,13 @@ const app = new Koa();
  * */
 
 
+app.use(async (ctx, next) => {
+    const start = Date.now();
+    await next();
+    const last = Date.now() - start;
+    console.log('x-response-time: ', last);
+})
+
 // favicon 逻辑
 function favicon(ctx, next) {
     ctx.status = 200;
@@ -75,15 +82,22 @@ gameKoa.use(async (ctx, next) => {
 gameKoa.use(async (ctx, next) => {
     const playerAction = ctx.playerAction;
     const result = gameHandle(playerAction);
-    ctx.status = 200;
-    if(result === 0){
-        ctx.body = 'tie!';
-    } else if (result === 1) {
-        ctx.body = 'you win!';
-        ctx.playerWin = true
-    } else {
-        ctx.body = 'you lose!';
-    }
+
+    await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            ctx.status = 200;
+            if(result === 0){
+                ctx.body = 'tie!';
+            } else if (result === 1) {
+                ctx.body = 'you win!';
+                ctx.playerWin = true
+            } else {
+                ctx.body = 'you lose!';
+            }
+            resolve()
+        }, 500)
+    })
+    
 })
 
 // 入口页面处理
